@@ -1,0 +1,27 @@
+{
+  "name": "purescript-winston",
+  "version": "1.0.0",
+  "description": "winston purescript wrapper ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/juspay/purescript-winston#readme"
+  },
+  "keywords": [
+    "winston",
+    "logger",
+    "purescript",
+    "wrapper"
+  ],
+  "author": "iamnewspecies",
+  "license": "https://github.com/juspay/purescript-winston/blob/master/LICENSE",
+  "homepage": "https://github.com/juspay/purescript-winston#readme",
+  "dependencies": {
+    "moment-timezone": "^0.5.17",
+    "os": "^0.1.1",
+    "winston": "^2.3.1"
+  }
+}
