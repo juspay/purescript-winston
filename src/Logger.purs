@@ -19,7 +19,7 @@
  along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 -}
 
-module Engineering.Services.Logger where
+module Logger where
 
 
 import Data.Function.Uncurried (Fn2, runFn2)
