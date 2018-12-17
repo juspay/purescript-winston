@@ -19,18 +19,17 @@
  along with this program. If not, see <https://www.gnu.org/licenses/agpl.html>.
 -}
 
-module Logger where
+module Engineering.Services.Logger where
 
 
-import Control.Monad.Eff (Eff, kind Effect)
 import Data.Function.Uncurried (Fn2, runFn2)
 import Data.Generic.Rep as G
 import Data.Generic.Rep.Show as GShow
 import Data.String (toLower)
+import Effect (Effect)
 import Prelude (class Show, Unit, map, show)
 
 -- | Types and Effect for Winston Logger
-foreign import data WINSTON :: Effect
 
 foreign import data Winston :: Type
 
@@ -45,8 +44,8 @@ data Level = Trace
            | Help
            | Warn
            | Error
-           | Sapir
-           | Fapir
+           | Scheduler
+           | SequelizeL
 
 derive instance genericLevel :: G.Generic Level _
 
@@ -91,63 +90,63 @@ warnLevel = LogLevel Warn
 errorLevel :: LogLevel
 errorLevel = LogLevel Error
 
-sapirLevel :: LogLevel
-sapirLevel = LogLevel Sapir
+schedulerLevel :: LogLevel
+schedulerLevel = LogLevel Scheduler
 
-fapirLevel :: LogLevel
-fapirLevel = LogLevel Fapir
+sequelizeLevel :: LogLevel
+sequelizeLevel = LogLevel SequelizeL
 
-foreign import _log :: forall eff. Fn2 String String (Eff (wn :: WINSTON | eff) Unit)
+foreign import _log :: forall a. Fn2 String a (Effect Unit)
 
 -- | Takes a string and logs using winston
-log' :: forall eff m. Show m => LogLevel -> m -> Eff (wn :: WINSTON |  eff) Unit
-log' level msg = runFn2 _log (map toLower show level) (show msg)
+log' :: forall m. LogLevel -> m -> Effect Unit
+log' level msg = runFn2 _log (map toLower show level) (msg)
 
 -- | Defining each log method, each takes a message and a LogLevel
-trace :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+trace :: forall m. m ->  Effect Unit
 trace m = do
   log' traceLevel m
 
-input :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+input :: forall m. m ->  Effect Unit
 input m = do
   log' inputLevel m
 
-verbose' :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+verbose' :: forall m. m ->  Effect Unit
 verbose' m = do
   log' verboseLevel m
 
-prompt :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+prompt :: forall m. m ->  Effect Unit
 prompt m = do
   log' promptLevel m
 
-debug' :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+debug' :: forall m. m ->  Effect Unit
 debug' m = do
   log' debugLevel m
 
-info :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+info :: forall m. m ->  Effect Unit
 info m = do
   log' infoLevel m
 
-data' :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+data' :: forall m. m ->  Effect Unit
 data' m = do
   log' dataLevel m
 
-help' :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+help' :: forall m. m ->  Effect Unit
 help' m = do
   log' helpLevel m
 
-warn :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+warn :: forall m. m ->  Effect Unit
 warn m = do
   log' warnLevel m
 
-error :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
+error :: forall m. m ->  Effect Unit
 error m = do
   log' errorLevel m
 
-sapir :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
-sapir m = do
-  log' sapirLevel m
+scheduler :: forall m. m ->  Effect Unit
+scheduler m = do
+  log' schedulerLevel m
 
-fapir :: forall eff m. Show m => m ->  Eff (wn :: WINSTON | eff) Unit
-fapir m = do
-  log' fapirLevel m
+sequelize :: String -> Effect Unit
+sequelize m = do
+  log' sequelizeLevel m

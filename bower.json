@@ -22,9 +22,9 @@
     "tests"
   ],
   "dependencies": {
-    "purescript-eff": "^3.2.0",
-    "purescript-strings": "^3.5.0",
-    "purescript-generics-rep": "^5.4.0",
-    "purescript-functions": "^3.0.0"
+    "purescript-effect": "^2.0.0",
+    "purescript-strings": "^4.0.0",
+    "purescript-generics-rep": "^6.1.0",
+    "purescript-functions": "^4.0.0"
   }
 }

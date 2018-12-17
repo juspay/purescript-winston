@@ -35,71 +35,84 @@ var moment = require("moment-timezone");
 var os = require("os");
 var winstonConfig = require("../../node_modules/winston/lib/winston/config");
 
+
 var customLevels = {
-    levels: {
-        trace: 0,
-        input: 1,
-        verbose: 2,
-        prompt: 3,
-        debug: 4,
-        info: 5,
-        data: 6,
-        help: 7,
-        warn: 8,
-        error: 9,
-        sapir: 5,
-        fapir: 5
-    },
-    colors: {
-        trace: 'magenta',
-        input: 'grey',
-        verbose: 'cyan',
-        prompt: 'grey',
-        debug: 'blue',
-        info: 'green',
-        data: 'grey',
-        help: 'cyan',
-        warn: 'yellow',
-        error: 'red',
-        sapir: 'green',
-        fapir: 'red'
-    }
+  levels: {
+    trace: 0,
+    input: 1,
+    verbose: 2,
+    prompt: 3,
+    debug: 4,
+    info: 5,
+    data: 6,
+    help: 7,
+    warn: 8,
+    error: 9,
+    scheduler: 5,
+    sequelizel: 5
+  },
+  colors: {
+    trace: "magenta",
+    input: "grey",
+    verbose: "cyan",
+    prompt: "grey",
+    debug: "blue",
+    info: "green",
+    data: "grey",
+    help: "cyan",
+    warn: "yellow",
+    error: "red",
+    scheduler: "cyan",
+    sequelizel: "magenta",
+  }
 };
+
+winston.addColors(customLevels.colors);
 
 // Create a new global logger
-var logger = new(winston.Logger)({
-    levels: customLevels.levels,
-    transports: [
-        new(winston.transports.Console)({
-            timestamp: function() {
-                return moment().utcOffset("+05:30").format("DD-MM-YYYY HH:mm:SS");
-            },
-            formatter: function(options) {
-                return options.timestamp() + " " + os.hostname() + " " + env + " " + winstonConfig.colorize(options.level) + " " +
-                    (undefined !== options.message ? options.message : "") +
-                    (options.meta && Object.keys(options.meta).length ? "\n\t" + JSON.stringify(options.meta) : '');
-            },
-            colorize: true
-        }),
-        new(winston.transports.File)({
-            filename: APP_LOG || "./" + application + ".data.log",
-            json: true,
-            colorize: false
-        })
-    ]
+var logger = new winston.Logger({
+  levels: customLevels.levels,
+  transports: [
+    new winston.transports.Console({
+      level: 'info',
+      timestamp: function() {
+        return moment()
+          .utcOffset("+05:30")
+          .format("DD-MM-YYYY HH:mm:ss.SSS");
+      },
+      formatter: function(options) {
+        return (
+          options.timestamp() +
+          " " +
+          os.hostname() +
+          " " +
+          env +
+          " " +
+          winstonConfig.colorize(options.level) +
+          " " +
+          (undefined !== options.message ? options.message : "") +
+          (options.meta && Object.keys(options.meta).length ?
+            "\n\t" + JSON.stringify(options.meta) :
+            "")
+        );
+      },
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: APP_LOG || "./" + application + ".data.log",
+      json: true,
+      colorize: false
+    })
+  ]
 });
 
-// Add colors if development, can be later moved to config
-if (env === 'development') {
-    winston.addColors(customLevels.colors);
-};
 
 // Logging helper
 var _log = function(level, message) {
-    return function() {
-        logger.log(level, message);
-        return {};
-    };
+  return function() {
+    logger.log(level, message);
+    return {};
+  };
 };
 
 exports._log = _log;
