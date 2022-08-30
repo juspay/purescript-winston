@@ -20,7 +20,7 @@
   "license": "https://github.com/juspay/purescript-winston/blob/master/LICENSE",
   "homepage": "https://github.com/juspay/purescript-winston#readme",
   "dependencies": {
-    "moment-timezone": "^0.5.17",
+    "moment-timezone": "^0.5.35",
     "os": "^0.1.1",
     "winston": "^2.3.1"
   }
